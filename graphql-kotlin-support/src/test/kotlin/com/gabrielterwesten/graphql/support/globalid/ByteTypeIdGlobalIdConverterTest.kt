@@ -39,7 +39,7 @@ internal class ByteTypeIdGlobalIdConverterTest {
   fun `should throw if expect type does not match type of encoded id`() {
     val converter = setupConverter()
 
-    expect { converter.decode<StringId>(converter.encode(LongId(0))) }
+    expect { converter.decode(converter.encode(LongId(0)), StringId::class) }
         .toThrow<InvalidGlobalIdException>()
         .messageContains("is not of expected type")
   }
