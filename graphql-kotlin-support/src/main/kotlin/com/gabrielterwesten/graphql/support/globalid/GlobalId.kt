@@ -1,12 +1,8 @@
 package com.gabrielterwesten.graphql.support.globalid
 
-/**
- * Superclass for all global ids.
- */
+/** Superclass for all global ids. */
 abstract class GlobalId<T>(
-    /**
-     * The id of the entity identified by this id.
-     */
+    /** The id of the entity identified by this id. */
     val id: T
 ) {
 

@@ -8,3 +8,10 @@ dependencies {
     testImplementation("ch.tutteli.atrium:atrium-fluent-en_GB")
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
+
+spotless {
+    kotlin {
+        // Waiting for support for kotlin 1.4 https://github.com/facebookincubator/ktfmt/issues/59
+        targetExclude("src/main/kotlin/com/gabrielterwesten/graphql/support/globalid/JackonIntegration.kt")
+    }
+}

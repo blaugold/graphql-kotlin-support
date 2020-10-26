@@ -8,10 +8,11 @@ import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.javaType
 
 /**
- * A [GlobalIdConverter] which expects [ByteTypeId] in all [GlobalIdRegistration]s.
+ * A [GlobalIdConverter] which expects [ByteTypeId] in all [GlobalIdRegistration] s.
  *
- * To encode an id, it serializes the wrapped [GlobalId.id] with the help of an [objectMapper], concatenates
- * the [TypeId.bytes] and the wrapped id into a [ByteArray] and encodes that as a base64 string.
+ * To encode an id, it serializes the wrapped [GlobalId.id] with the help of an [objectMapper],
+ * concatenates the [TypeId.bytes] and the wrapped id into a [ByteArray] and encodes that as a
+ * base64 string.
  */
 class ByteTypeIdGlobalIdConverter(
     private val registrationRepository: GlobalIdRegistrationRepository,

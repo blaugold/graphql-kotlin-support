@@ -44,8 +44,8 @@ class ByteTypeId(upper: Byte, lower: Byte) : TypeId() {
  * [TypeId] s must be unique with in a [GlobalIdRegistrationRepository].
  */
 data class GlobalIdRegistration(
-  val typeId: TypeId,
-  val type: KClass<out GlobalId<*>>,
+    val typeId: TypeId,
+    val type: KClass<out GlobalId<*>>,
 )
 
 /** A repository for [GlobalIdRegistration] s. */
@@ -74,10 +74,8 @@ class GlobalIdRegistrationRepository {
   fun findByType(type: KClass<*>): GlobalIdRegistration? = _registrations.find { it.type == type }
 
   inline fun <reified T : GlobalId<*>> add(typeId: TypeId) =
-    add(GlobalIdRegistration(typeId, T::class))
+      add(GlobalIdRegistration(typeId, T::class))
 
   inline fun <reified T : GlobalId<*>> add(typeId: Byte) =
-    add(GlobalIdRegistration(ByteTypeId(typeId), T::class))
+      add(GlobalIdRegistration(ByteTypeId(typeId), T::class))
 }
-
-

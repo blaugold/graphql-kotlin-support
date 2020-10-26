@@ -9,6 +9,5 @@ import org.springframework.context.annotation.Configuration
 class GraphQlConfiguration {
 
   @Bean
-  fun globalIdRegistrationRepository() =
-      GlobalIdRegistrationRepository().apply { add<UserId>(0) }
+  fun globalIdRegistrationRepository() = GlobalIdRegistrationRepository().apply { add<UserId>(0) }
 }

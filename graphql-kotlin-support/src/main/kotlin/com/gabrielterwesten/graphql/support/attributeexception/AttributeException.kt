@@ -5,7 +5,7 @@ interface AttributeConfig {
 }
 
 data class DefaultAttributeConfig(override val includeStackTrace: Boolean = false) :
-  AttributeConfig
+    AttributeConfig
 
 abstract class AttributeException : RuntimeException() {
 

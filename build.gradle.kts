@@ -1,14 +1,24 @@
+import com.diffplug.gradle.spotless.SpotlessExtension
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") apply false
     id("io.spring.dependency-management") apply false
+    id("com.diffplug.spotless")
 }
 
 allprojects {
+    apply(plugin = "com.diffplug.spotless")
+
     group = "com.gabrielterwesten"
     version = "1.0-SNAPSHOT"
+
+    spotless {
+        kotlinGradle {
+            ktlint()
+        }
+    }
 }
 
 subprojects {
@@ -44,5 +54,28 @@ subprojects {
 
     tasks.named<Test>("test") {
         useJUnitPlatform()
+    }
+
+    the<SpotlessExtension>().apply {
+        kotlin {
+            ktfmt("0.18")
+        }
+
+        format("yaml") {
+            target("**/*.ya?ml")
+            prettier()
+        }
+
+        format("html") {
+            target("**/*.html")
+            prettier()
+        }
+    }
+}
+
+spotless {
+    format("markdown") {
+        target("*.md")
+        prettier()
     }
 }
