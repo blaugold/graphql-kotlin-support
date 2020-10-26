@@ -38,7 +38,7 @@ class ByteTypeIdGlobalIdConverter(
     return b64encoder.encodeToString(bytes)
   }
 
-  @ExperimentalStdlibApi
+  @OptIn(ExperimentalStdlibApi::class)
   override fun <T : GlobalId<*>> decode(id: String, expectedType: KClass<T>?): T {
     val rawIdBytes =
         try {

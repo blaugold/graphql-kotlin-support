@@ -16,3 +16,5 @@ interface GlobalIdConverter {
    */
   fun <T : GlobalId<*>> decode(id: String, expectedType: KClass<T>? = null): T
 }
+
+inline fun <reified T : GlobalId<*>> GlobalIdConverter.decode(id: String): T = decode(id, T::class)
