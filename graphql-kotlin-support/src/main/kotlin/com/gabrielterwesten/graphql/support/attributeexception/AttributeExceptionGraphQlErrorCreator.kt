@@ -8,7 +8,7 @@ import graphql.execution.DataFetcherExceptionHandlerParameters
 import graphql.language.SourceLocation
 
 class AttributeExceptionGraphQlErrorCreator(
-    private val config: AttributeConfig,
+    private val config: AttributeExceptionConfig,
 ) : GraphQlErrorCreator {
   override fun create(
       exception: Throwable,
@@ -22,7 +22,7 @@ class AttributeExceptionGraphQlErrorCreator(
         message = exception.message,
         path = handlerParameters.path.toList(),
         locations = listOf(handlerParameters.sourceLocation),
-        extensions = exception.attributes(config),
+        extensions = exception.createAttributes(config),
     )
   }
 }
