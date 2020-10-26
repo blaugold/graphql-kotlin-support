@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.gabrielterwesten.graphql.support.autoconfigure.GraphQlSupportAttributeExceptionAutoConfiguration,\
+com.gabrielterwesten.graphql.support.autoconfigure.GraphQlSupportErrorsAutoConfiguration,\
+com.gabrielterwesten.graphql.support.autoconfigure.GraphQlSupportGlobalIdAutoConfiguration
