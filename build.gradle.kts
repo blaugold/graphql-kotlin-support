@@ -78,4 +78,9 @@ spotless {
         target("*.md")
         prettier()
     }
+
+    format("yaml") {
+        target(".github/**/*.ya?ml")
+        prettier()
+    }
 }

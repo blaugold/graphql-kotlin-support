@@ -1,0 +1,29 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@2
+      - name: Setup java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Cache Gradle packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+      - name: Build with Gradle
+        run: ./gradlew build
+      - name: Archive failing tests report
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: failing-tests-report
+          path: '**/build/reports'
