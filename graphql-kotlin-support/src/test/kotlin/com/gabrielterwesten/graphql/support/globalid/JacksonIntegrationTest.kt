@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import org.junit.jupiter.api.Test
 
-internal class GlobalIdModuleTest {
+internal class JacksonIntegrationTest {
 
   @Test
   fun `end to end`() {
