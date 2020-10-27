@@ -5,7 +5,7 @@ on:
       - created
 
 jobs:
-  release:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,7 +22,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
       - name: Publish to bintray
-        run: ./gradlew bintrayUpload && ./gradlew bintrayUpload
+        run: ./gradlew bintrayUpload && ./gradlew bintrayPublish
         env:
           BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
           BINTRAY_API_KEY: ${{ secrets.BINTRAY_API_KEY }}
