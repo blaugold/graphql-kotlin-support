@@ -14,7 +14,7 @@ allprojects {
     apply(plugin = "com.diffplug.spotless")
 
     group = "com.gabrielterwesten"
-    version = "0.1.0"
+    version = "0.2.0"
 
     spotless {
         kotlinGradle {
