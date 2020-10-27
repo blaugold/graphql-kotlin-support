@@ -65,12 +65,12 @@ subprojects {
         }
 
         format("yaml") {
-            target("**/*.yaml", "**/*.yml")
+            target("src/**/*.yaml", "src/**/*.yml")
             prettier()
         }
 
         format("html") {
-            target("**/*.html")
+            target("src/**/*.html")
             prettier()
         }
     }
