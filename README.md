@@ -1,10 +1,16 @@
+# graphql-kotlin-support
+
+A library which provides some commonly needed functionality for the development of GraphQL APIs, specifically with
+`graphql-kotlin`.
+
+- Efficient and ergonomic `GlobalId` implementation
+- `AttributeException`: Flexible abstraction for exposing error attributes to clients
+- Data fetching exception handling including exception resolution, logging and transformation of
+  `AttributeException`s into `GraphQLError`s.
+
 ## TODO
 
-- Full example
-- ci
-  - publishing
 - Readme
-- publish
 
 ## Development
 

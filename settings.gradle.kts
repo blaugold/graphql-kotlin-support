@@ -6,6 +6,7 @@ pluginManagement {
         id("com.diffplug.spotless") version "5.7.0"
         id("io.spring.dependency-management") version "1.0.6.RELEASE"
         id("org.springframework.boot") version "2.3.4.RELEASE"
+        id("com.jfrog.bintray") version "1.8.5"
     }
 }
 

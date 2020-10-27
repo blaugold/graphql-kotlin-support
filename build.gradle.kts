@@ -1,4 +1,5 @@
 import com.diffplug.gradle.spotless.SpotlessExtension
+import com.jfrog.bintray.gradle.BintrayExtension
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -6,6 +7,7 @@ plugins {
     kotlin("jvm") apply false
     id("io.spring.dependency-management") apply false
     id("com.diffplug.spotless")
+    id("com.jfrog.bintray") apply false
 }
 
 allprojects {
@@ -22,6 +24,7 @@ allprojects {
 }
 
 subprojects {
+    apply(plugin = "maven-publish")
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "io.spring.dependency-management")
 
@@ -69,6 +72,54 @@ subprojects {
         format("html") {
             target("**/*.html")
             prettier()
+        }
+    }
+
+    val publishedPackages = listOf(
+        "graphql-kotlin-support",
+        "graphql-kotlin-support-spring",
+        "graphql-kotlin-support-autoconfigure",
+        "graphql-kotlin-support-starter"
+    )
+
+    if (publishedPackages.contains(name)) {
+        apply(plugin = "com.jfrog.bintray")
+
+        val packageVersion = version as String
+        val repoName = name
+
+        val sources = the<SourceSetContainer>()["main"].allSource
+
+        val sourceJar = tasks.create<Jar>("sourceJar") {
+            from(sources)
+            archiveClassifier.set("sources")
+        }
+
+        the<PublishingExtension>().apply {
+            publications {
+                create<MavenPublication>("maven") {
+                    from(components["kotlin"])
+                    artifact(sourceJar)
+                }
+            }
+        }
+
+        the<BintrayExtension>().apply {
+            user = System.getenv("BINTRAY_USER")
+            key = System.getenv("BINTRAY_API_KEY")
+            setProperty("publications", arrayOf("maven"))
+
+            pkg.apply {
+                repo = "maven"
+                name = repoName
+                userOrg = "gabriel-terwesten-oss"
+                setProperty("licenses", arrayOf("MIT"))
+                vcsUrl = "https://github.com/blaugold/graphql-kotlin-support"
+
+                version.apply {
+                    name = packageVersion
+                }
+            }
         }
     }
 }
