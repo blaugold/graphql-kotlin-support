@@ -52,8 +52,12 @@ class UserMutations(
 
   fun createUser(input: CreateUserInput): CreateUserPayload {
     val user =
-        userService.createUser(
-            User(userName = input.userName, displayName = input.displayName, email = input.email))
+        User(
+                userName = input.userName,
+                displayName = input.displayName,
+                email = input.email,
+            )
+            .let(userService::createUser)
 
     return CreateUserPayload(input.clientRequestId, user.let(conversionService::convert))
   }

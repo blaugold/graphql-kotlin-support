@@ -12,6 +12,7 @@ pluginManagement {
 rootProject.name = "graphql-kotlin-support"
 
 include("graphql-kotlin-support")
+include("graphql-kotlin-support-spring")
 include("graphql-kotlin-support-autoconfigure")
 include("graphql-kotlin-support-starter")
 include("example")
