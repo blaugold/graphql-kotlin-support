@@ -9,7 +9,7 @@ import kotlin.reflect.KFunction
 import kotlin.reflect.KProperty
 import org.springframework.context.ApplicationContext
 
-class MonoGlobalIdSpringDataFetcherFactoryProvider(
+class ReactorGlobalIdSpringDataFetcherFactoryProvider(
     private val objectMapper: ObjectMapper,
     private val applicationContext: ApplicationContext,
     private val globalIdConverter: GlobalIdConverter,
@@ -19,7 +19,7 @@ class MonoGlobalIdSpringDataFetcherFactoryProvider(
       target: Any?, kFunction: KFunction<*>
   ): DataFetcherFactory<Any?> =
       DataFetcherFactory<Any?> {
-        MonoSpringDataFetcher(target, kFunction, objectMapper, applicationContext)
+        ReactorSpringDataFetcher(target, kFunction, objectMapper, applicationContext)
       }
 
   override fun propertyDataFetcherFactory(

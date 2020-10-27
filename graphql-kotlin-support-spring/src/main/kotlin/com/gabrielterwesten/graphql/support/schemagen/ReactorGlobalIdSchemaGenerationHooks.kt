@@ -7,7 +7,7 @@ import graphql.schema.GraphQLType
 import kotlin.reflect.KType
 import reactor.core.publisher.Mono
 
-class MonoGlobalIdSchemaGenerationHooks : SchemaGeneratorHooks {
+class ReactorGlobalIdSchemaGenerationHooks : SchemaGeneratorHooks {
   override fun willResolveMonad(type: KType): KType =
       when (type.classifier) {
         Mono::class -> type.arguments.firstOrNull()?.type

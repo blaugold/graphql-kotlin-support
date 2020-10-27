@@ -7,10 +7,12 @@ A library which provides some commonly needed functionality for the development 
 - `AttributeException`: Flexible abstraction for exposing error attributes to clients
 - Data fetching exception handling including exception resolution, logging and transformation of
   `AttributeException`s into `GraphQLError`s.
+- Handling of function returning `Mono`
+- Propagation of request reactor `Context` to coroutines and returned `Mono`s.
 
 ## TODO
 
-- Readme
+- Docs
 
 ## Development
 

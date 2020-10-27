@@ -2,11 +2,13 @@ package com.gabrielterwesten.graphql.support.autoconfigure
 
 import com.expediagroup.graphql.execution.KotlinDataFetcherFactoryProvider
 import com.expediagroup.graphql.hooks.SchemaGeneratorHooks
+import com.expediagroup.graphql.spring.execution.GraphQLContextFactory
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.gabrielterwesten.graphql.support.globalid.GlobalId
 import com.gabrielterwesten.graphql.support.globalid.GlobalIdConverter
-import com.gabrielterwesten.graphql.support.schemagen.MonoGlobalIdSchemaGenerationHooks
-import com.gabrielterwesten.graphql.support.schemagen.MonoGlobalIdSpringDataFetcherFactoryProvider
+import com.gabrielterwesten.graphql.support.schemagen.ReactorGlobalIdSchemaGenerationHooks
+import com.gabrielterwesten.graphql.support.schemagen.ReactorGlobalIdSpringDataFetcherFactoryProvider
+import com.gabrielterwesten.graphql.support.schemagen.ReactorGraphQlContextFactory
 import org.springframework.boot.autoconfigure.AutoConfigureAfter
 import org.springframework.boot.autoconfigure.AutoConfigureBefore
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
@@ -26,18 +28,23 @@ class GraphQlSupportSchemaGenAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  fun monoSpringSchemaGenerationHooks(): SchemaGeneratorHooks = MonoGlobalIdSchemaGenerationHooks()
+  fun reactorGlobalIdSchemaGenerationHooks(): SchemaGeneratorHooks =
+      ReactorGlobalIdSchemaGenerationHooks()
 
   @Bean
   @ConditionalOnMissingBean
-  fun monoGlobalIdSpringDataFetcherFactoryProvider(
+  fun reactorGlobalIdSpringDataFetcherFactoryProvider(
       objectMapper: ObjectMapper,
       applicationContext: ApplicationContext,
       globalIdConverter: GlobalIdConverter,
   ): KotlinDataFetcherFactoryProvider =
-      MonoGlobalIdSpringDataFetcherFactoryProvider(
+      ReactorGlobalIdSpringDataFetcherFactoryProvider(
           objectMapper,
           applicationContext,
           globalIdConverter,
       )
+
+  @Bean
+  @ConditionalOnMissingBean
+  fun reactorGraphQlContextFactor(): GraphQLContextFactory<*> = ReactorGraphQlContextFactory()
 }
