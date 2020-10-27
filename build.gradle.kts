@@ -65,7 +65,7 @@ subprojects {
         }
 
         format("yaml") {
-            target("**/*.ya?ml")
+            target("**/*.yaml", "**/*.yml")
             prettier()
         }
 
@@ -131,7 +131,7 @@ spotless {
     }
 
     format("yaml") {
-        target(".github/**/*.ya?ml")
+        target(".github/**/*.yaml", ".github/**/*.yml")
         prettier()
     }
 }
