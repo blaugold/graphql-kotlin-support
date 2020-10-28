@@ -1,6 +1,8 @@
 import com.diffplug.gradle.spotless.SpotlessExtension
 import com.jfrog.bintray.gradle.BintrayExtension
+import com.jfrog.bintray.gradle.tasks.BintrayUploadTask
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
+import org.gradle.api.publish.maven.internal.artifact.FileBasedMavenArtifact
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -32,7 +34,7 @@ subprojects {
         mavenCentral()
     }
 
-    the<DependencyManagementExtension>().apply {
+    configure<DependencyManagementExtension> {
         imports {
             mavenBom("org.springframework.boot:spring-boot-dependencies:2.3.4.RELEASE")
         }
@@ -49,7 +51,9 @@ subprojects {
         }
     }
 
-    the<JavaPluginExtension>().targetCompatibility = JavaVersion.VERSION_11
+    configure<JavaPluginExtension> {
+        targetCompatibility = JavaVersion.VERSION_11
+    }
 
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions.jvmTarget = "11"
@@ -59,7 +63,7 @@ subprojects {
         useJUnitPlatform()
     }
 
-    the<SpotlessExtension>().apply {
+    configure<SpotlessExtension> {
         kotlin {
             ktfmt("0.18")
         }
@@ -86,7 +90,8 @@ subprojects {
         apply(plugin = "com.jfrog.bintray")
 
         val packageVersion = version as String
-        val repoName = name
+        val packageName = name
+        val scmUrl = "https://github.com/blaugold/graphql-kotlin-support"
 
         val sources = the<SourceSetContainer>()["main"].allSource
 
@@ -95,30 +100,55 @@ subprojects {
             archiveClassifier.set("sources")
         }
 
-        the<PublishingExtension>().apply {
+        configure<PublishingExtension> {
             publications {
                 create<MavenPublication>("maven") {
                     from(components["kotlin"])
                     artifact(sourceJar)
+                    pom {
+                        name.set(packageName)
+                        description.set("Opinionated library to support the implementation of GraphQL APIs with graphql-kotlin.")
+                        developers { developer { name.set("Gabriel Terwesten") } }
+                        scm { url.set(scmUrl) }
+                        licenses { license { name.set("MIT") } }
+                    }
                 }
             }
         }
 
-        the<BintrayExtension>().apply {
+        configure<BintrayExtension> {
             user = System.getenv("BINTRAY_USER")
             key = System.getenv("BINTRAY_API_KEY")
             setProperty("publications", arrayOf("maven"))
+            publish = true
 
             pkg.apply {
                 repo = "maven"
-                name = repoName
+                name = packageName
                 userOrg = "gabriel-terwesten-oss"
                 setProperty("licenses", arrayOf("MIT"))
-                vcsUrl = "https://github.com/blaugold/graphql-kotlin-support"
+                vcsUrl = scmUrl
 
                 version.apply {
                     name = packageVersion
                 }
+            }
+        }
+
+        val project = this
+
+        tasks.withType<BintrayUploadTask> {
+            doFirst {
+                project.the<PublishingExtension>().publications
+                    .filterIsInstance<MavenPublication>()
+                    .forEach { publication ->
+                        val moduleFile = buildDir.resolve("publications/${publication.name}/module.json")
+                        if (moduleFile.exists()) {
+                            publication.artifact(object : FileBasedMavenArtifact(moduleFile) {
+                                override fun getDefaultExtension() = "module"
+                            })
+                        }
+                    }
             }
         }
     }
