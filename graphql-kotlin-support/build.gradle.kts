@@ -1,12 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 dependencies {
-    implementation("com.graphql-java:graphql-java")
     implementation("com.fasterxml.jackson.core:jackson-databind")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("com.graphql-java:graphql-java")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation(kotlin("reflect"))
-
     testImplementation("ch.tutteli.atrium:atrium-fluent-en_GB")
+    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     testImplementation("org.junit.jupiter:junit-jupiter") {
         exclude(group = "junit", module = "junit")
     }

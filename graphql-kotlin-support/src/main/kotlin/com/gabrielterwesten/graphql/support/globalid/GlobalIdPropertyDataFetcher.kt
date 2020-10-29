@@ -1,7 +1,5 @@
-package com.gabrielterwesten.graphql.support.schemagen
+package com.gabrielterwesten.graphql.support.globalid
 
-import com.gabrielterwesten.graphql.support.globalid.GlobalId
-import com.gabrielterwesten.graphql.support.globalid.GlobalIdConverter
 import graphql.schema.DataFetchingEnvironment
 import graphql.schema.PropertyDataFetcher
 

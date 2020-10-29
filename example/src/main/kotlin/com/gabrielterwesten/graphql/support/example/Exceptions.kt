@@ -3,7 +3,7 @@ package com.gabrielterwesten.graphql.support.example
 import com.fasterxml.jackson.databind.JsonMappingException
 import com.gabrielterwesten.graphql.support.attributeexception.AttributeException
 import com.gabrielterwesten.graphql.support.attributeexception.AttributeExceptionConfig
-import com.gabrielterwesten.graphql.support.errors.ExceptionResolver
+import com.gabrielterwesten.graphql.support.exceptions.ExceptionResolver
 import com.gabrielterwesten.graphql.support.globalid.InvalidGlobalIdException
 import org.springframework.stereotype.Component
 
@@ -55,7 +55,7 @@ class UserNameAlreadyTakenException(
 
 @Component
 class ApiExceptionResolver : ExceptionResolver {
-  override fun resolveException(exception: Throwable): Throwable? =
+  override suspend fun resolveException(exception: Throwable): Throwable? =
       when (exception) {
         is ApiException -> exception
         is IllegalArgumentException -> resolveException(exception)

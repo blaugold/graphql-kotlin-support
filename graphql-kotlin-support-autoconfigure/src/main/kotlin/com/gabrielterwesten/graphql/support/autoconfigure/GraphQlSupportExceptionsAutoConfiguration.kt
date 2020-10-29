@@ -1,6 +1,6 @@
 package com.gabrielterwesten.graphql.support.autoconfigure
 
-import com.gabrielterwesten.graphql.support.errors.*
+import com.gabrielterwesten.graphql.support.exceptions.*
 import graphql.execution.DataFetcherExceptionHandler
 import org.springframework.boot.autoconfigure.AutoConfigureBefore
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
@@ -11,16 +11,16 @@ import org.springframework.context.annotation.Configuration
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(DataFetcherExceptionHandler::class)
 @AutoConfigureBefore(name = ["com.expediagroup.graphql.spring.GraphQLAutoConfiguration"])
-class GraphQlSupportErrorsAutoConfiguration {
+class GraphQlSupportExceptionsAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  fun delegatingDataFetcherExceptionHandler(
+  fun delegatingGraphQlExceptionHandler(
       exceptionResolver: ExceptionResolver?,
-      exceptionObserver: DataFetcherExceptionObserver?,
+      exceptionObserver: GraphQlExceptionObserver?,
       graphQlErrorCreator: GraphQlErrorCreator
-  ): DataFetcherExceptionHandler =
-      DelegatingDataFetcherExceptionHandler(
+  ): DelegatingGraphQlExceptionHandler =
+      DelegatingGraphQlExceptionHandler(
           exceptionResolver,
           exceptionObserver,
           graphQlErrorCreator,
@@ -28,6 +28,12 @@ class GraphQlSupportErrorsAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  fun defaultDataFetcherExceptionLogger(): DataFetcherExceptionObserver =
-      DefaultDataFetcherExceptionLogger()
+  fun delegatingDataFetcherExceptionHandler(
+      graphQlExceptionHandler: GraphQlExceptionHandler
+  ): DataFetcherExceptionHandler = DelegatingDataFetcherExceptionHandler(graphQlExceptionHandler)
+
+  @Bean
+  @ConditionalOnMissingBean
+  fun defaultDataFetcherExceptionLogger(): GraphQlExceptionObserver =
+      DefaultGraphQlExceptionLogger()
 }

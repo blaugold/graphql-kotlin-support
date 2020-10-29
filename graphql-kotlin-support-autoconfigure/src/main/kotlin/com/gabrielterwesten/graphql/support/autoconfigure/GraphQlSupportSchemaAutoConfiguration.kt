@@ -3,12 +3,17 @@ package com.gabrielterwesten.graphql.support.autoconfigure
 import com.expediagroup.graphql.execution.KotlinDataFetcherFactoryProvider
 import com.expediagroup.graphql.hooks.SchemaGeneratorHooks
 import com.expediagroup.graphql.spring.execution.GraphQLContextFactory
+import com.expediagroup.graphql.spring.execution.QueryHandler
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.gabrielterwesten.graphql.support.GraphQlKotlinSupportContextFactory
+import com.gabrielterwesten.graphql.support.GraphQlKotlinSupportDataFetcherFactoryProvider
+import com.gabrielterwesten.graphql.support.GraphQlKotlinSupportQueryHandler
+import com.gabrielterwesten.graphql.support.GraphQlKotlinSupportSchemaGenerationHooks
+import com.gabrielterwesten.graphql.support.dataloader.DataLoaderRegistryFactory
+import com.gabrielterwesten.graphql.support.exceptions.GraphQlExceptionHandler
 import com.gabrielterwesten.graphql.support.globalid.GlobalId
 import com.gabrielterwesten.graphql.support.globalid.GlobalIdConverter
-import com.gabrielterwesten.graphql.support.schemagen.ReactorGlobalIdSchemaGenerationHooks
-import com.gabrielterwesten.graphql.support.schemagen.ReactorGlobalIdSpringDataFetcherFactoryProvider
-import com.gabrielterwesten.graphql.support.schemagen.ReactorGraphQlContextFactory
+import graphql.GraphQL
 import org.springframework.boot.autoconfigure.AutoConfigureAfter
 import org.springframework.boot.autoconfigure.AutoConfigureBefore
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
@@ -24,12 +29,12 @@ import reactor.core.publisher.Mono
 @AutoConfigureBefore(name = ["com.expediagroup.graphql.spring.GraphQLAutoConfiguration"])
 @AutoConfigureAfter(GraphQlSupportGlobalIdAutoConfiguration::class)
 @ConditionalOnBean(GlobalIdConverter::class)
-class GraphQlSupportSchemaGenAutoConfiguration {
+class GraphQlSupportSchemaAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
   fun reactorGlobalIdSchemaGenerationHooks(): SchemaGeneratorHooks =
-      ReactorGlobalIdSchemaGenerationHooks()
+      GraphQlKotlinSupportSchemaGenerationHooks()
 
   @Bean
   @ConditionalOnMissingBean
@@ -38,7 +43,7 @@ class GraphQlSupportSchemaGenAutoConfiguration {
       applicationContext: ApplicationContext,
       globalIdConverter: GlobalIdConverter,
   ): KotlinDataFetcherFactoryProvider =
-      ReactorGlobalIdSpringDataFetcherFactoryProvider(
+      GraphQlKotlinSupportDataFetcherFactoryProvider(
           objectMapper,
           applicationContext,
           globalIdConverter,
@@ -46,5 +51,18 @@ class GraphQlSupportSchemaGenAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  fun reactorGraphQlContextFactor(): GraphQLContextFactory<*> = ReactorGraphQlContextFactory()
+  fun reactorGraphQlContextFactor(): GraphQLContextFactory<*> = GraphQlKotlinSupportContextFactory()
+
+  @Bean
+  @ConditionalOnMissingBean
+  fun graphQlKotlinSupportQueryHandler(
+      graphQl: GraphQL,
+      dataLoaderRegistryFactory: DataLoaderRegistryFactory? = null,
+      exceptionHandler: GraphQlExceptionHandler,
+  ): QueryHandler =
+      GraphQlKotlinSupportQueryHandler(
+          graphQl,
+          dataLoaderRegistryFactory,
+          exceptionHandler,
+      )
 }

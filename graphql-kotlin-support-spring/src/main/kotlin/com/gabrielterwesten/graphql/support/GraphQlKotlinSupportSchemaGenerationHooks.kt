@@ -1,4 +1,4 @@
-package com.gabrielterwesten.graphql.support.schemagen
+package com.gabrielterwesten.graphql.support
 
 import com.expediagroup.graphql.hooks.SchemaGeneratorHooks
 import com.gabrielterwesten.graphql.support.globalid.isGlobalId
@@ -7,7 +7,7 @@ import graphql.schema.GraphQLType
 import kotlin.reflect.KType
 import reactor.core.publisher.Mono
 
-class ReactorGlobalIdSchemaGenerationHooks : SchemaGeneratorHooks {
+class GraphQlKotlinSupportSchemaGenerationHooks : SchemaGeneratorHooks {
   override fun willResolveMonad(type: KType): KType =
       when (type.classifier) {
         Mono::class -> type.arguments.firstOrNull()?.type

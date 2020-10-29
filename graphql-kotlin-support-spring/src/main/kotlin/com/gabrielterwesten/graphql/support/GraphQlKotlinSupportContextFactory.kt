@@ -1,4 +1,4 @@
-package com.gabrielterwesten.graphql.support.schemagen
+package com.gabrielterwesten.graphql.support
 
 import com.expediagroup.graphql.spring.execution.GraphQLContextFactory
 import kotlin.coroutines.coroutineContext
@@ -8,12 +8,12 @@ import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.http.server.reactive.ServerHttpResponse
 import reactor.util.context.Context
 
-open class ReactorGraphQlContextFactory : GraphQLContextFactory<ReactorGraphQlContext> {
+open class GraphQlKotlinSupportContextFactory : GraphQLContextFactory<GraphQlKotlinSupportContext> {
 
   override suspend fun generateContext(
       request: ServerHttpRequest, response: ServerHttpResponse
-  ): ReactorGraphQlContext = ReactorGraphQlContext(getReactorContext())
+  ): GraphQlKotlinSupportContext = GraphQlKotlinSupportContext(getReactorContext())
 
   @OptIn(ExperimentalCoroutinesApi::class)
-  suspend fun getReactorContext(): Context? = coroutineContext[ReactorContext]?.context
+  protected suspend fun getReactorContext(): Context? = coroutineContext[ReactorContext]?.context
 }

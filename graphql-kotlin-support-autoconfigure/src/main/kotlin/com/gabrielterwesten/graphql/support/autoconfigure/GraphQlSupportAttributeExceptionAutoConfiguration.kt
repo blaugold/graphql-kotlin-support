@@ -4,7 +4,7 @@ import com.gabrielterwesten.graphql.support.attributeexception.AttributeExceptio
 import com.gabrielterwesten.graphql.support.attributeexception.AttributeExceptionConfig
 import com.gabrielterwesten.graphql.support.attributeexception.AttributeExceptionGraphQlErrorCreator
 import com.gabrielterwesten.graphql.support.attributeexception.DefaultAttributeConfig
-import com.gabrielterwesten.graphql.support.errors.GraphQlErrorCreator
+import com.gabrielterwesten.graphql.support.exceptions.GraphQlErrorCreator
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.web.ErrorProperties

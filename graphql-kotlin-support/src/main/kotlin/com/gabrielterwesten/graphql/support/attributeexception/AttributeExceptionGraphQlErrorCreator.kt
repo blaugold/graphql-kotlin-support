@@ -1,6 +1,6 @@
 package com.gabrielterwesten.graphql.support.attributeexception
 
-import com.gabrielterwesten.graphql.support.errors.GraphQlErrorCreator
+import com.gabrielterwesten.graphql.support.exceptions.GraphQlErrorCreator
 import graphql.ErrorClassification
 import graphql.ErrorType
 import graphql.GraphQLError
@@ -10,9 +10,9 @@ import graphql.language.SourceLocation
 class AttributeExceptionGraphQlErrorCreator(
     private val config: AttributeExceptionConfig,
 ) : GraphQlErrorCreator {
-  override fun create(
+  override suspend fun create(
       exception: Throwable,
-      handlerParameters: DataFetcherExceptionHandlerParameters,
+      handlerParameters: DataFetcherExceptionHandlerParameters?,
   ): GraphQLError {
     require(exception is AttributeException) {
       "${this::class.simpleName} can only handle AttributeExceptions but got ${exception::class}"
@@ -20,8 +20,8 @@ class AttributeExceptionGraphQlErrorCreator(
 
     return AttributeExceptionGraphQLError(
         message = exception.message,
-        path = handlerParameters.path.toList(),
-        locations = listOf(handlerParameters.sourceLocation),
+        path = handlerParameters?.path?.toList(),
+        locations = handlerParameters?.sourceLocation?.let { listOf(it) },
         extensions = exception.createAttributes(config),
     )
   }
@@ -30,12 +30,12 @@ class AttributeExceptionGraphQlErrorCreator(
 class AttributeExceptionGraphQLError(
     private val message: String,
     private val path: List<Any>?,
-    private val locations: List<SourceLocation>,
+    private val locations: List<SourceLocation>?,
     private val extensions: Map<String, Any?>
 ) : GraphQLError {
   override fun getMessage(): String = message
 
-  override fun getLocations(): List<SourceLocation> = locations
+  override fun getLocations(): List<SourceLocation>? = locations
 
   override fun getErrorType(): ErrorClassification = ErrorType.DataFetchingException
 

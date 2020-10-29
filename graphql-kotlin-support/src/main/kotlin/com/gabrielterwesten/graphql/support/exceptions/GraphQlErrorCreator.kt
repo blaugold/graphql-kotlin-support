@@ -1,4 +1,4 @@
-package com.gabrielterwesten.graphql.support.errors
+package com.gabrielterwesten.graphql.support.exceptions
 
 import graphql.GraphQLError
 import graphql.execution.DataFetcherExceptionHandlerParameters
@@ -9,8 +9,8 @@ import graphql.execution.DataFetcherExceptionHandlerParameters
  * The exception might have been processed by an [ExceptionResolver].
  */
 interface GraphQlErrorCreator {
-  fun create(
+  suspend fun create(
       exception: Throwable,
-      handlerParameters: DataFetcherExceptionHandlerParameters,
+      handlerParameters: DataFetcherExceptionHandlerParameters?,
   ): GraphQLError
 }
