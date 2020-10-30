@@ -13,6 +13,16 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.isSuperclassOf
 
 /**
+ * Unwraps a [InvalidGlobalIdException] if it is the cause of an exception during deserialization
+ * with Jackson. Otherwise this [Throwable] is returned as is.
+ */
+fun Throwable.unwrapInvalidGlobalIdException(): Throwable =
+    (this as? IllegalArgumentException)?.let { it.cause as? JsonMappingException }?.let {
+      it.cause as? InvalidGlobalIdException
+    }
+        ?: this
+
+/**
  * [GlobalIdConverter] may depend on [ObjectMapper]. This provider allows registration of
  * [GlobalIdModule] before the converter has been created.
  */

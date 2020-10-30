@@ -1,10 +1,10 @@
 package com.gabrielterwesten.graphql.support.example
 
-import com.fasterxml.jackson.databind.JsonMappingException
 import com.gabrielterwesten.graphql.support.attributeexception.AttributeException
 import com.gabrielterwesten.graphql.support.attributeexception.AttributeExceptionConfig
 import com.gabrielterwesten.graphql.support.exceptions.ExceptionResolver
 import com.gabrielterwesten.graphql.support.globalid.InvalidGlobalIdException
+import com.gabrielterwesten.graphql.support.globalid.unwrapInvalidGlobalIdException
 import org.springframework.stereotype.Component
 
 /** An error code which allows clients to classify an error. */
@@ -56,24 +56,12 @@ class UserNameAlreadyTakenException(
 @Component
 class ApiExceptionResolver : ExceptionResolver {
   override suspend fun resolveException(exception: Throwable): Throwable? =
-      when (exception) {
-        is ApiException -> exception
-        is IllegalArgumentException -> resolveException(exception)
-        else -> null
+      exception.unwrapInvalidGlobalIdException().let {
+        when (it) {
+          is ApiException -> exception
+          is InvalidGlobalIdException -> NotFoundException(cause = it)
+          else -> null
+        }
       }
           ?: InternalErrorException(cause = exception)
-
-  private fun resolveException(exception: IllegalArgumentException): Throwable? =
-      when (val cause = exception.cause
-      ) {
-        is JsonMappingException -> resolveException(cause)
-        else -> null
-      }
-
-  private fun resolveException(exception: JsonMappingException): Throwable? =
-      when (val cause = exception.cause
-      ) {
-        is InvalidGlobalIdException -> NotFoundException(cause = cause)
-        else -> null
-      }
 }
